@@ -34,6 +34,14 @@ void *get_in_addr(struct sockaddr *sa)
   return &(((struct sockaddr_in6*)sa)->sin6_addr);
 }
 
+int main(void)
+{
+  // nghe trên sock_fd, kết nối mới trên new_fd
+  int sock_fd, new_fd;
+  struct addrinfo hints, *servinfo, *p;
+  struct sockaddr_storage their_addr;
+  socklen_t sin_size;
+  struct sigaction sa; //???
 
 
 
