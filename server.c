@@ -18,7 +18,7 @@
 
 void sigchld_handler(int s)
 {
-  void(s);                    // tránh cảnh báo biến không được sử dụng
+  (void)s;                    // tránh cảnh báo biến không được sử dụng
   int saved_errno = errno;    // waitpid() có thể ghi đè nên errno, nên chúng ta sẽ lưu trữ và phục hồi nó sau
   while(waitpid(-1, NULL, WNOHANG) > 0);
   errno = saved_errno;
@@ -52,24 +52,24 @@ int main(void)
   hints.ai_flags = AI_PASSIVE;      // sử dụng IP của tôi
 
   if((rv = getaddrinfo(NULL, PORT, &hints, &servinfo)) != 0) {
-    fprintf(stderr, "getaddrinfo: %s\n", gai_stderror(rv));
+    fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(rv));
     return 1;
   }
 
   //
   for(p = servinfo; p != NULL; p = p->ai_next) {
-    if((sockfd = socket(p->ai_family, p->ai_socktype, p->ai_protocol)) == -1) {
+    if((sock_fd = socket(p->ai_family, p->ai_socktype, p->ai_protocol)) == -1) {
       perror("server: socket");
       continue;
     }
 
-    if(setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int)) == -1) {
+    if(setsockopt(sock_fd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int)) == -1) {
       perror("setsockopt");
       exit(1);
     }
 
-    if(bind(sockfd, p->ai_addr, p->ai_addrlen) == -1) {
-      close(sockfd);
+    if(bind(sock_fd, p->ai_addr, p->ai_addrlen) == -1) {
+      close(sock_fd);
       perror("server: bind");
       continue;
     }
@@ -84,7 +84,7 @@ int main(void)
     exit(1);
   }
 
-  if(listen(sockfd, BACKLOG) == -1) {
+  if(listen(sock_fd, BACKLOG) == -1) {
     perror("listen");
     exit(1);
   }
@@ -101,7 +101,7 @@ int main(void)
 
   while(1) {  // main accept() loop
     sin_size = sizeof their_addr;
-    new_fd = accept(sockfd, (struct sockaddr *)&their_addr, &sin_size);
+    new_fd = accept(sock_fd, (struct sockaddr *)&their_addr, &sin_size);
     if(new_fd == -1) {
       perror("accept");
       continue;
@@ -111,7 +111,7 @@ int main(void)
     printf("server: got connection from %s\n", s);
 
     if(!fork()) { // this is the child process
-      close(sockfd); // child doesn't need the listener
+      close(sock_fd); // child doesn't need the listener
       if(send(new_fd, "Hello, world!", 13, 0) == -1)
         perror("send");
       close(new_fd);
