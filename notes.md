@@ -4,3 +4,6 @@
 3. Lắng nghe bằng hàm `listen`
 4. Chấp nhận một yêu cầu kết nối bằng hàm `accept`
 5. Thiết lập một kết nối bằng hàm `connect`
+
+#
+Cả các mô tả socket và các mô tả tệp tin đều nằm trong cùng một dãy. Điều này xác nhận rằng đầu vào/đầu ra của Linux coi socket và tệp  là như nhau.
