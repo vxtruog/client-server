@@ -19,3 +19,10 @@ accept()
 read()/write()
 close()
 ```
+# TCP client's function call order
+```
+socket()
+connect()
+read()/write()
+close()
+```
