@@ -26,3 +26,19 @@ connect()
 read()/write()
 close()
 ```
+# UDP client-server connection
+```
+5 steps of UDP server
+- Create UDP socket.
+- Bind the socket to server address.
+- Wait until datagram packet arrives from client.
+- Process the datagram packet and send a reply to client.
+- Go back to Step 3.
+
+5 steps of UDP client
+- Create UDP socket.
+- Send message to server.
+- Wait until response from server is recieved.
+- Process reply and go back to step 2, if necessary.
+- Close socket descriptor and exit.
+```
