@@ -1,4 +1,4 @@
-# 1. Ghi chú
+# 1. GHI CHÚ
 ## 1.1. Lý thuyết mạng
 - Có hai loại socket internet cơ bản: Stream Sockets (SOCK_STREAM) và Datagram Sockets (SOCK_DGRAM).
 - Stream Sockets là các luồng giao tiếp hai chiều đáng tin cậy, chúng sử dụng một giao thức gọi là TCP (The Transmission Control Protocol), đảm bảo dữ liệu của bạn được truyền đến một cách tuần tự và không có lỗi.
@@ -14,6 +14,17 @@
   + IPv4 (số nguyên 32 bit không dấu, mỗi byte được phân tách bởi dấu chấm), địa chỉ loopback `127.0.0.1`
   + IPv6 (số nguyên 128 bit không dấu, mỗi khối hai byte được phân tách bởi dấu hai chấm), địa chỉ loopback `::1`
 - Số cổng là một địa chỉ logic dùng để phân biệt các ứng dụng và dịch vụ mạng khác nhau trên cùng một địa chỉ IP. Khi chỉ định số cổng, bạn đang cho biết ứng dụng hoặc dịch vụ nào trên thiết bị đích mà bạn muốn gửi dữ liệu đến. Các dịch vụ khác nhau trên internet có các số cổng quen thuộc khác nhau, có thể xem chúng trong tệp `/etc/services`. Các cổng dưới 1024 thường được coi là đặc biệt và thường yêu cầu quyền truy cập đặc biệt của hệ điều hành để sử dụng.
+## 1.2. Thứ tự byte mạng
+- TCP/IP định nghĩa một thứ tự byte mạng duy nhất (big-endian) cho bất kỳ mục dữ liệu số nguyên nào chẳng hạn như địa chỉ IP được truyền qua mạng trong tiêu đề gói. Nhưng do thứ tự byte của máy chủ thường là (little-endian) nên Unix cung cấp các hàm sau để chuyển đổi giữa thứ tự byte mạng và thứ tự byte máy chủ:
+```
+#include <arpa/inet.h>
+uint32_t htonl (uint32_t hostlong);
+uint16_t htons (uint16_t hostshort);
+  (trả về thứ tự byte của mạng)
+uint32_t ntohl (uint32_t netlong);
+uint16_t ntohs (uint16_t netshort);
+  (trả về thứ tự byte của máy chủ)
+```
 
 # 2. Vòng đời của TCP-server và TCP-client
 <img src="/image/tcp.jpeg" alt="Hình 1" width="90%">
