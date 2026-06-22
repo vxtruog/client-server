@@ -112,6 +112,12 @@ int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen);
 void *memset(void *s, int c, size_t n);
   (trong đó s là địa chỉ bắt đầu của vùng nhớ, c là giá trị byte sẽ được ghi, n là số byte cần ghi)
 ```
+- Hàm `send()` và `recv` dùng để trao đổi dữ liệu sau khi kết nối TCP được thiết lập
+```
+#include <sys/socket.h>
+ssize_t send(int sockfd, const void *buf, size_t len, int flags);
+ssize_t recv(int sockfd, void *buf, size_t len, int flags);
+```
 
 # 2. Vòng đời của TCP-server và TCP-client
 <img src="/image/tcp.jpeg" alt="Hình 1" width="90%">
