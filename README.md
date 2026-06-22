@@ -73,6 +73,21 @@ struct sockaddr_storage {
 ```
 - Kernel sẽ đọc trường `sa_family` (tương ứng với `ss_family`) nằm ở đầu vùng nhớ địa chỉ socket, dựa vào giá trị này, kernel xác định dữ liệu đang được lưu trong `sockaddr_storage` thực chất là địa chỉ IPv4, IPv6 hay một họ địa chỉ khác, sau đó diễn giải các byte còn lại theo cấu trúc tương ứng.
 
+## 1.4. Các lệnh gọi hệ thống
+- Hàm `socket()` được máy khách và máy chủ sử dụng để tạo socket descriptor
+```
+#include <sys/types.h>
+#include <sys/socket.h>
+int socket(int domain, int type, int protocol);
+    (trả về chỉ số socket descriptor nếu thành công, -1 nếu thất bại)
+```
+- Hàm `bind()` yêu cầu kernel liên kết địa chỉ socket của máy chủ trong `addr` với socket descriptor `sockfd`
+```
+#include <sys/socket.h>
+int bind(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
+  (trả về 0 nếu thành công, -1 nếu thất bại)
+```
+
 # 2. Vòng đời của TCP-server và TCP-client
 <img src="/image/tcp.jpeg" alt="Hình 1" width="90%">
 
