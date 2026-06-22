@@ -6,12 +6,12 @@
 
 int main()
 {
-  // các biến
+  // variables
   int serverSocketFd, clientSocketFd;
   struct sockaddr_in serverAddress, clientAddress;
   int clientAddressLength;
   
-  // tạo socket
+  // create socket
   serverSocketFd = socket(AF_INET, SOCK_STREAM, 0);
   if(serverSocketFd == -1)
   {
@@ -23,7 +23,7 @@ int main()
     printf("socket: %d\n", serverSocketFd);
   }
   
-  // liên kết
+  // bind
   bzero(&serverAddress, sizeof(serverAddress));
   serverAddress.sin_family = AF_INET;
   serverAddress.sin_addr.s_addr = htonl(INADDR_ANY);
@@ -38,7 +38,7 @@ int main()
     printf("bound\n");
   }
   
-  // lắng nghe
+  // listen
   if(listen(serverSocketFd, 1) != 0)
   {
     printf("failed to listen\n");
@@ -49,7 +49,7 @@ int main()
     printf("listening...\n");
   }
   
-  // chấp nhận
+  // accept
   bzero(&clientAddress, sizeof(clientAddress));
   clientSocketFd = accept(serverSocketFd, (struct sockaddr *)&clientAddress, &clientAddressLength);
   if(clientSocketFd == -1)
@@ -62,12 +62,12 @@ int main()
     printf("accepted\n");
   }
   
-  // giao tiếp
+  // comminucation
   char *msg = "hello world!";
   write(clientSocketFd, msg, strlen(msg));
   printf("the message \"%s\"\n", msg);
   
-  // đóng
+  // close
   close(clientSocketFd);
   printf("client socket closed\n");
   close(serverSocketFd);\
