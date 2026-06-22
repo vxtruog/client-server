@@ -6,11 +6,11 @@
 
 int main()
 {
-	// tên các biến
+	// variables
 	int socketFd;
 	struct sockaddr_in serverAddress;
 	
-	// tạo socket
+	// create socket
 	socketFd = socket(AF_INET, SOCK_STREAM, 0);
 	if(socketFd == -1)
 	{
@@ -22,8 +22,8 @@ int main()
 		printf("socket : %d\n", socketFd);
 	}
 	
-	// kết nối
-	bzero(&serverAddress, sizeof(serverAddress));
+	// connect
+	memset(&serverAddress, 0, sizeof(serverAddress));
 	serverAddress.sin_family = AF_INET;
 	serverAddress.sin_addr.s_addr = inet_addr("127.0.0.1");
 	serverAddress.sin_port = htons(4444);
@@ -37,12 +37,12 @@ int main()
 		printf("connected\n");
 	}
 	
-	// đọc
+	// comminucation
 	char buf[128];
 	read(socketFd, buf, 128);
 	printf("received : %s\n", buf);
 	
-	// đóng
+	// close
 	close(socketFd);
 	printf("socket closed\n");
 
