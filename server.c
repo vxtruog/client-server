@@ -63,14 +63,14 @@ int main()
   }
   
   // comminucation
-  char *msg = "hello world!";
-  write(clientSocketFd, msg, strlen(msg));
+  char *msg = "hello, i'm Vu Xuan Truong.";
+  send(clientSocketFd, msg, strlen(msg), 0);
   printf("the message \"%s\"\n", msg);
   
   // close
   close(clientSocketFd);
   printf("client socket closed\n");
-  close(serverSocketFd);\
+  close(serverSocketFd);
   printf("server socket closed\n");
   
   return 0;
