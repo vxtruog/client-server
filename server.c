@@ -24,10 +24,52 @@ int main()
   }
   
   // liên kết
+  bzero(&serverAddress, sizeof(serverAddress));
+  serverAddress.sin_family = AF_INET;
+  serverAddress.sin_addr.s_addr = htonl(INADDR_ANY);
+  serverAddress.sin_port = htons(4444);
+  if(bind(serverSocketFd, (struct sockaddr *)&serverAddress, sizeof(serverAddress)) != 0)
+  {
+    printf("failed to bind\n");
+    exit(1);
+  }
+  else
+  {
+    printf("bound\n");
+  }
   
   // lắng nghe
+  if(listen(serverSocketFd, 1) != 0)
+  {
+    printf("failed to listen\n");
+    exit(1);
+  }
+  else
+  {
+    printf("listening...\n");
+  }
+  
   // chấp nhận
+  bzero(&clientAddress, sizeof(clientAddress));
+  clientSocketFd = accept(serverSocketFd, (struct sockaddr *)&clientAddress, &clientAddressLength);
+  if(clientSocketFd == -1)
+  {
+    printf("failed to accept\n");
+    exit(1);
+  }
+  else
+  {
+    printf("accepted\n");
+  }
+  
   // giao tiếp
+  char *msg = "hello world!";
+  write(clientSocketFd, msg, strlen(msg));
+  printf("the message \"%s\"\n", msg);
+  
   // đóng
+  close(clientSocketFd);
+  close(serverSocketFd);
+  
   return 0;
 }
