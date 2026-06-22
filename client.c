@@ -27,7 +27,7 @@ int main()
 	serverAddress.sin_family = AF_INET;
 	serverAddress.sin_addr.s_addr = inet_addr("127.0.0.1");
 	serverAddress.sin_port = htons(4444);
-	if(connect() != 0)
+	if(connect(socketFd, (struct sockaddr*)&serverAddress, sizeof(serverAddress)) != 0)
 	{
 		printf("failed to connection\n");
 		exit(1);
@@ -44,7 +44,7 @@ int main()
 	
 	// đóng
 	close(socketFd);
-	printf("socket closed\");
+	printf("socket closed\n");
 
 	return 0;
 }
