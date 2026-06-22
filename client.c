@@ -34,7 +34,7 @@ int main()
 	}
 	else
 	{
-		printf("socket : %d\n", socketFd);
+		printf("connected\n");
 	}
 	
 	// đọc
