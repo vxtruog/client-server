@@ -106,6 +106,13 @@ int connect(int clientfd, const struct sockaddr *addr, socklen_t addrlen);
 #include <sys/socket.h>
 int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen);
 ```
+- Hàm `memset()` dùng để thao tác với bộ nhớ, ghi giá trị theo byte
+```
+#include <string.h>
+void *memset(void *s, int c, size_t n);
+  (trong đó s là địa chỉ bắt đầu của vùng nhớ, c là giá trị byte sẽ được ghi, n là số byte cần ghi)
+```
+
 # 2. Vòng đời của TCP-server và TCP-client
 <img src="/image/tcp.jpeg" alt="Hình 1" width="90%">
 
