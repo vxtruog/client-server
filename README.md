@@ -1,4 +1,6 @@
 # 1. GHI CHÚ
+- Tài liệu tham khảo: https://beej.us/guide/bgnet/html/index-wide.html
+- Tài liệu Youtube: https://www.youtube.com/@drtoshnazarov
 ## 1.1. Lý thuyết mạng
 - Có hai loại socket internet cơ bản: Stream Sockets (SOCK_STREAM) và Datagram Sockets (SOCK_DGRAM).
 - Stream Sockets là các luồng giao tiếp hai chiều đáng tin cậy, chúng sử dụng một giao thức gọi là TCP (The Transmission Control Protocol), đảm bảo dữ liệu của bạn được truyền đến một cách tuần tự và không có lỗi.
