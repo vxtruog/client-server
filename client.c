@@ -39,7 +39,7 @@ int main()
 	
 	// comminucation
 	char buf[128];
-	read(socketFd, buf, 128);
+	recv(socketFd, buf, 128, 0);
 	printf("received : %s\n", buf);
 	
 	// close
