@@ -87,6 +87,22 @@ int socket(int domain, int type, int protocol);
 int bind(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
   (trả về 0 nếu thành công, -1 nếu thất bại)
 ```
+- Hàm `listen()` để chuyển socket sang trạng thái lắng nghe
+```
+#include <sys/socket.h>
+int listen(int sockfd, int backlog);
+  (trả về 0 nếu thành công, -1 nếu thất bại)
+```
+- Hàm `connect()`, một máy khách cố gắng thiết lập kết nối internet với máy chủ tại địa chỉ socket `addr`
+```
+#include <sys/socket.h>
+int connect(int clientfd, const struct sockaddr *addr, socklen_t addrlen);
+  (trả về 0 nếu thành công, -1 nếu thất bại)
+```
+- Hàm `connect()` sẽ chặn cho đến khi kết nối được thiết lập thành công hoặc xảy ra lỗi. Nếu thành công, bộ mô tả `clientfd` hiện đã sẵn sàng để đọc và ghi, và kết quả của việc kết nối được đặc trưng bởi cặp socket `(x:y, addr.sin_addr:addr.sin_port)`, trong đó `x` và `y` là địa chỉ bên phía máy khách, còn `addr.sin_addr` và `addr.sin_port` là địa chỉ bên phía máy chủ.
+
+- Thông thường, máy khách là các thực thể chủ động khởi tạo yêu cầu kết nối, máy chủ là các thực thể thụ động chờ đợi yêu cầu kết nối từ máy khách. Theo mặc định, nhân hệ điều hành giả định rằng một mô tả được tạo bởi hàm `socket()` tương ứng với một socket hoạt động sẽ tồn tại ở phía máy khách của kết nối. Máy chủ gọi hàm `listen()` để thông báo cho hệ điều hành rằng mô tả đó sẽ được sử dụng bởi máy chủ thay vì máy khách. Hàm `listen()` chuyển đổi `sockfd` từ một socket hoạt động thành một socket lắng nghe có thể chấp nhận các yêu cầu kết nối từ máy khách. Tham số `backlog` là số lượng yêu cầu kết nối đang chờ xử lý `accept()` tối đa có thể được phép trước khi hệ điều hành bắt đầu từ chối các yêu cầu.
+
 
 # 2. Vòng đời của TCP-server và TCP-client
 <img src="/image/tcp.jpeg" alt="Hình 1" width="90%">
