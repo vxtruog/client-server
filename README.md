@@ -14,7 +14,8 @@
   + IPv4 (số nguyên 32 bit không dấu, mỗi byte được phân tách bởi dấu chấm), địa chỉ loopback `127.0.0.1`
   + IPv6 (số nguyên 128 bit không dấu, mỗi khối hai byte được phân tách bởi dấu hai chấm), địa chỉ loopback `::1`
 - Số cổng là một địa chỉ logic dùng để phân biệt các ứng dụng và dịch vụ mạng khác nhau trên cùng một địa chỉ IP. Khi chỉ định số cổng, bạn đang cho biết ứng dụng hoặc dịch vụ nào trên thiết bị đích mà bạn muốn gửi dữ liệu đến. Các dịch vụ khác nhau trên internet có các số cổng quen thuộc khác nhau, có thể xem chúng trong tệp `/etc/services`. Các cổng dưới 1024 thường được coi là đặc biệt và thường yêu cầu quyền truy cập đặc biệt của hệ điều hành để sử dụng.
-## 1.2. Thứ tự byte mạng
+
+## 1.2. Thứ tự byte mạng và chuyển đổi địa chỉ IP
 - TCP/IP định nghĩa một thứ tự byte mạng duy nhất (big-endian) cho bất kỳ mục dữ liệu số nguyên nào chẳng hạn như địa chỉ IP được truyền qua mạng trong tiêu đề gói. Nhưng do thứ tự byte của máy chủ thường là (little-endian) nên Unix cung cấp các hàm sau để chuyển đổi giữa thứ tự byte mạng và thứ tự byte máy chủ:
 ```
 #include <arpa/inet.h>
@@ -25,6 +26,52 @@ uint32_t ntohl (uint32_t netlong);
 uint16_t ntohs (uint16_t netshort);
   (trả về thứ tự byte của máy chủ)
 ```
+- Các chương trình ứng dụng có thể chuyển đổi qua lại giữa địa chỉ IP và chuỗi thập phân có dấu chấm bằng các hàm sau:
+```
+#include <arpa/inet.h>
+int inet_pton(protocol_family, const char *src, void *dst);
+const char *inet_ntop(protocol_family, const void *src, char *dst);
+```
+
+## 1.3. Các cấu trúc cần thiết
+- Cấu trúc `sockaddr`, lưu trữ thông tin địa chỉ socket một cách tổng quát để các hàm trong API socket sử dụng một cách đồng nhất
+```
+struct sockaddr {
+  uint16_t  sa_family;              // protocol family (AF_INET, AF_INET6, ...)
+  char      sa_data[14];            // Address data
+};
+```
+- Cấu trúc `sockaddr_in`, lưu trữ thông tin địa chỉ cụ thể cho IPv4
+```
+struct sockaddr_in {
+  uint16_t        sin_family;       // protocol family (AF_INET)
+  uint16_t        sin_port;         // port number in network byte order
+  struct in_addr  sin_addr          // IPv4 address in network byte order
+  unsigned char   sin_zero[8]       // pad to sizeof(struct sockaddr)
+};
+```
+- Cấu trúc `sockaddr_in6`, lưu trữ thông tin địa chỉ cụ thể cho IPv6
+```
+struct sockaddr_in6 {
+    u_int16_t       sin6_family;   // protocol family (AF_INET6)
+    u_int16_t       sin6_port;     // port number in network byte order
+    u_int32_t       sin6_flowinfo; // IPv6 flow information
+    struct in6_addr sin6_addr;     // IPv6 address
+    u_int32_t       sin6_scope_id; // Scope ID
+};
+```
+- Cấu trúc `sockaddr_storage`, một vùng nhớ đủ lớn để chứa bất kỳ loại địa chỉ của socket nào
+```
+struct sockaddr_storage {
+    sa_family_t  ss_family;     // address family
+
+    // all this is padding, implementation specific, ignore it:
+    char      __ss_pad1[_SS_PAD1SIZE];
+    int64_t   __ss_align;
+    char      __ss_pad2[_SS_PAD2SIZE];
+};
+```
+- Kernel sẽ đọc trường `sa_family` (tương ứng với `ss_family`) nằm ở đầu vùng nhớ địa chỉ socket, dựa vào giá trị này, kernel xác định dữ liệu đang được lưu trong `sockaddr_storage` thực chất là địa chỉ IPv4, IPv6 hay một họ địa chỉ khác, sau đó diễn giải các byte còn lại theo cấu trúc tương ứng.
 
 # 2. Vòng đời của TCP-server và TCP-client
 <img src="/image/tcp.jpeg" alt="Hình 1" width="90%">
