@@ -69,7 +69,9 @@ int main()
   
   // đóng
   close(clientSocketFd);
-  close(serverSocketFd);
+  printf("client socket closed\n");
+  close(serverSocketFd);\
+  printf("server socket closed\n");
   
   return 0;
 }
