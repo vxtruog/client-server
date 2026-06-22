@@ -24,7 +24,7 @@ int main()
   }
   
   // bind
-  bzero(&serverAddress, sizeof(serverAddress));
+  memset(&serverAddress, 0, sizeof(serverAddress));
   serverAddress.sin_family = AF_INET;
   serverAddress.sin_addr.s_addr = htonl(INADDR_ANY);
   serverAddress.sin_port = htons(4444);
@@ -50,7 +50,7 @@ int main()
   }
   
   // accept
-  bzero(&clientAddress, sizeof(clientAddress));
+  memset(&clientAddress, 0, sizeof(clientAddress));
   clientSocketFd = accept(serverSocketFd, (struct sockaddr *)&clientAddress, &clientAddressLength);
   if(clientSocketFd == -1)
   {
