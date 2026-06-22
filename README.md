@@ -19,7 +19,7 @@
 
 ## 1.2. Thứ tự byte mạng và chuyển đổi địa chỉ IP
 - TCP/IP định nghĩa một thứ tự byte mạng duy nhất (big-endian) cho bất kỳ mục dữ liệu số nguyên nào chẳng hạn như địa chỉ IP được truyền qua mạng trong tiêu đề gói. Nhưng do thứ tự byte của máy chủ thường là (little-endian) nên Unix cung cấp các hàm sau để chuyển đổi giữa thứ tự byte mạng và thứ tự byte máy chủ:
-```
+```c
 #include <arpa/inet.h>
 uint32_t htonl (uint32_t hostlong);
 uint16_t htons (uint16_t hostshort);
@@ -29,7 +29,7 @@ uint16_t ntohs (uint16_t netshort);
   (trả về thứ tự byte của máy chủ)
 ```
 - Các chương trình ứng dụng có thể chuyển đổi qua lại giữa địa chỉ IP và chuỗi thập phân có dấu chấm bằng các hàm sau:
-```
+```c
 #include <arpa/inet.h>
 int inet_pton(protocol_family, const char *src, void *dst);
 const char *inet_ntop(protocol_family, const void *src, char *dst);
@@ -37,14 +37,14 @@ const char *inet_ntop(protocol_family, const void *src, char *dst);
 
 ## 1.3. Các cấu trúc cần thiết
 - Cấu trúc `sockaddr`, lưu trữ thông tin địa chỉ socket một cách tổng quát để các hàm trong API socket sử dụng một cách đồng nhất
-```
+```c
 struct sockaddr {
   uint16_t  sa_family;              // protocol family (AF_INET, AF_INET6, ...)
   char      sa_data[14];            // Address data
 };
 ```
 - Cấu trúc `sockaddr_in`, lưu trữ thông tin địa chỉ cụ thể cho IPv4
-```
+```c
 struct sockaddr_in {
   uint16_t        sin_family;       // protocol family (AF_INET)
   uint16_t        sin_port;         // port number in network byte order
@@ -53,7 +53,7 @@ struct sockaddr_in {
 };
 ```
 - Cấu trúc `sockaddr_in6`, lưu trữ thông tin địa chỉ cụ thể cho IPv6
-```
+```c
 struct sockaddr_in6 {
     u_int16_t       sin6_family;   // protocol family (AF_INET6)
     u_int16_t       sin6_port;     // port number in network byte order
@@ -63,7 +63,7 @@ struct sockaddr_in6 {
 };
 ```
 - Cấu trúc `sockaddr_storage`, một vùng nhớ đủ lớn để chứa bất kỳ loại địa chỉ của socket nào
-```
+```c
 struct sockaddr_storage {
     sa_family_t  ss_family;     // address family
 
@@ -77,45 +77,45 @@ struct sockaddr_storage {
 
 ## 1.4. Các lệnh gọi hệ thống
 - Hàm `socket()` được máy khách và máy chủ sử dụng để tạo socket descriptor
-```
+```c
 #include <sys/types.h>
 #include <sys/socket.h>
 int socket(int domain, int type, int protocol);
     (trả về chỉ số socket descriptor nếu thành công, -1 nếu thất bại)
 ```
 - Hàm `bind()` yêu cầu kernel liên kết địa chỉ socket của máy chủ trong `addr` với socket descriptor `sockfd`
-```
+```c
 #include <sys/socket.h>
 int bind(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
   (trả về 0 nếu thành công, -1 nếu thất bại)
 ```
 - Hàm `listen()` để chuyển `sockfd` sang trạng thái lắng nghe để có thể chấp nhận các yêu cầu kết nối từ máy khách. Tham số `backlog` là số lượng yêu cầu kết nối đang chờ xử lý `accept()` tối đa có thể được phép trước khi hệ điều hành bắt đầu từ chối các yêu cầu.
-```
+```c
 #include <sys/socket.h>
 int listen(int sockfd, int backlog);
   (trả về 0 nếu thành công, -1 nếu thất bại)
 ``` 
 - Hàm `connect()`, một máy khách cố gắng thiết lập kết nối internet với máy chủ tại địa chỉ socket `addr`
-```
+```c
 #include <sys/socket.h>
 int connect(int clientfd, const struct sockaddr *addr, socklen_t addrlen);
   (trả về 0 nếu thành công, -1 nếu thất bại)
 ```
 - Hàm `connect()` sẽ chặn cho đến khi kết nối được thiết lập thành công hoặc xảy ra lỗi. Nếu thành công, bộ mô tả `clientfd` hiện đã sẵn sàng để đọc và ghi, và kết quả của việc kết nối được đặc trưng bởi cặp socket `(x:y, addr.sin_addr:addr.sin_port)`, trong đó `x` và `y` là địa chỉ bên phía máy khách, còn `addr.sin_addr` và `addr.sin_port` là địa chỉ bên phía máy chủ.
 - Hàm `accept()`, khi ai đó đang cố gằng dùng `connect()` để kết nối đến máy của bạn trên một cổng mà bạn đang `listen()`. Kết nối của họ sẽ được xếp vào hàng đợi chờ được `accept()` xử lý. Nó sẽ trả về cho bạn một bộ socket descriptor hoàn toàn mới để sử dụng cho kết nối duy nhất này. Đột nhiên bạn có hai bộ socket descriptor với giá của một, bộ socket descriptor ban đầu vẫn đang lắng nghe các kết nối mới khác, và bộ socket descriptor mới được tạo cuối cùng đã sẵn sàng để `send()` và `recv()`.
-```
+```c
 #include <sys/types.h>
 #include <sys/socket.h>
 int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen);
 ```
 - Hàm `memset()` dùng để thao tác với bộ nhớ, ghi giá trị theo byte
-```
+```c
 #include <string.h>
 void *memset(void *s, int c, size_t n);
   (trong đó s là địa chỉ bắt đầu của vùng nhớ, c là giá trị byte sẽ được ghi, n là số byte cần ghi)
 ```
 - Hàm `send()` và `recv()` dùng để trao đổi dữ liệu sau khi kết nối TCP được thiết lập
-```
+```c
 #include <sys/socket.h>
 ssize_t send(int sockfd, const void *buf, size_t len, int flags);
 ssize_t recv(int sockfd, void *buf, size_t len, int flags);
