@@ -100,7 +100,12 @@ int connect(int clientfd, const struct sockaddr *addr, socklen_t addrlen);
   (trả về 0 nếu thành công, -1 nếu thất bại)
 ```
 - Hàm `connect()` sẽ chặn cho đến khi kết nối được thiết lập thành công hoặc xảy ra lỗi. Nếu thành công, bộ mô tả `clientfd` hiện đã sẵn sàng để đọc và ghi, và kết quả của việc kết nối được đặc trưng bởi cặp socket `(x:y, addr.sin_addr:addr.sin_port)`, trong đó `x` và `y` là địa chỉ bên phía máy khách, còn `addr.sin_addr` và `addr.sin_port` là địa chỉ bên phía máy chủ.
-
+- Hàm `accept()`, khi ai đó đang cố gằng dùng `connect()` để kết nối đến máy của bạn trên một cổng mà bạn đang `listen()`. Kết nối của họ sẽ được xếp vào hàng đợi chờ được `accept()` xử lý. Nó sẽ trả về cho bạn một bộ socket descriptor hoàn toàn mới để sử dụng cho kết nối duy nhất này. Đột nhiên bạn có hai bộ socket descriptor với giá của một, bộ socket descriptor ban đầu vẫn đang lắng nghe các kết nối mới khác, và bộ socket descriptor mới được tạo cuối cùng đã sẵn sàng để `send()` và `recv()`.
+```
+#include <sys/types.h>
+#include <sys/socket.h>
+int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen);
+```
 # 2. Vòng đời của TCP-server và TCP-client
 <img src="/image/tcp.jpeg" alt="Hình 1" width="90%">
 
