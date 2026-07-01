@@ -127,6 +127,33 @@ ssize_t recv(int sockfd, void *buf, size_t len, int flags);
 # 2. Vòng đời của TCP-server và TCP-client
 <img src="/image/tcp.jpeg" alt="Hình 1" width="90%">
 
+# 3. Half-closed TCP connection
+close(), function call => kết thúc hoàn toàn kết nối trên cả hai đầu cuối. Trong trường hợp nếu chỉ một đầu gọi close(), đầu bên kia vẫn đang truyền dữ liệu thì có thể gây ra sự cố.
+Khi đó chúng ta sẽ dùng TCP Half-close, nó cho phép chỉ một trong các máy chấm dứt kết nối đi ra của nó, thay vì chấm dứt toàn bộ socket, nó vẫn nhận được dữ liệu từ đầu kia 
+Điều này đạt được bằng cách dùng lệnh shutdown()
+```
+#include <sys/socket.h>
+int shutdown(int sock, int howto);
+```
+
+Truy xuất thuộc tính của socket
+```
+#include <sys/socket.h>
+int getsockopt(int sock, int level, int optname, void* optval, socklen_t *optlen);
+```
+Thiết lập tùy chọn của socket
+```
+#include <sys/socket.h>
+int setsockopt(int sock, int level, int optname, const void* optval, socklen_t *optlen);
+```
+Tái sử dụng socket, khi mà chờ phản hồi từ máy kết nối, socket vẫn chiếm giữ địa chỉ cổng và cổng không thể được liên kết với một mạch khác, trừ khi nó bị ngắt kết nối. Cách xử lý là set tham số SO_REUSEADDR trong setsockopt();
+# 4. Máy chủ TCP đa nhiệm (Multitasking TCP servers)
+fork(), tạo một tiến trình thông qua function call
+```
+#include <unistd.h>
+pid_t fork(void);
+```
+
 # 3. UDP client-server connection
 ```
 5 steps of UDP server
