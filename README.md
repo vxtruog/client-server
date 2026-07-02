@@ -156,7 +156,7 @@ pid_t fork(void);
    trong tiến trình con, fork() trả về 0.
    nếu tạo tiến trình thất bại, trả về -1.)
 ```
-- Tiến trình zombie là tiến trình con đã hoàn thành công việc của nó, nhưng chưa được giải phóng khỏi bộ nhớ. Trách nhiệm của tiến trình cha là phải giải phóng các tiến trình con khi tiến trình con kết thúc công việc.
+- Tiến trình zombie là tiến trình con đã hoàn thành công việc và kết thúc thực thi, các tài nguyên thực thi của nó đã được hệ điều hành giải phóng, nhưng kernel vẫn giữ lại một mục trong bảng tiến trình (Process Table) chứa PID và trạng thái kết thúc vì tiến trình cha chưa gọi wait() hoặc waitpid() để thu hồi tiến trình con.
 
 # 3. UDP client-server connection
 ```
