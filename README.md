@@ -148,15 +148,15 @@ int setsockopt(int sock, int level, int optname, const void* optval, socklen_t *
 ```
 Tái sử dụng socket, khi mà chờ phản hồi từ máy kết nối, socket vẫn chiếm giữ địa chỉ cổng và cổng không thể được liên kết với một mạch khác, trừ khi nó bị ngắt kết nối. Cách xử lý là set tham số SO_REUSEADDR trong setsockopt();
 # 4. Máy chủ TCP đa nhiệm (Multitasking TCP servers)
-- Ý tưởng về máy chủ đa nhiệm là cho phép nhiều máy khách kết nối và trao đổi dữ liệu với cùng một máy chủ cùng một lúc.
-- Tiến trình là một chương trình đang chạy, mỗi tiến trình có bộ nhớ và tài nguyên được phân bổ cho nó, nhiều tiến trình có thể chạy cùng lúc.
-- Mỗi tiến trình sẽ có ID duy nhất trong hệ điều hành.
-- Để tạo một tiến trình, cần gọi hàm fork()
+- Để tạo một tiến trình, ta gọi hàm fork(). Khi đó, hệ điều hành tạo một tiến trình con mới có PID riêng, tiến trình con kế thừa toàn bộ ngữ cảnh của tiến trình cha.
 ```
 #include <unistd.h>
 pid_t fork(void);
-  trả về Process ID (PID)
+  (trong tiến trình cha, fork() trả về PID của tiến trình con, tức là một số nguyên dương.
+   trong tiến trình con, fork() trả về 0.
+   nếu tạo tiến trình thất bại, trả về -1.)
 ```
+- Tiến trình zombie là tiến trình con đã hoàn thành công việc của nó, nhưng chưa được giải phóng khỏi bộ nhớ. Trách nhiệm của tiến trình cha là phải giải phóng các tiến trình con khi tiến trình con kết thúc công việc.
 
 # 3. UDP client-server connection
 ```
