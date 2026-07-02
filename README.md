@@ -148,10 +148,14 @@ int setsockopt(int sock, int level, int optname, const void* optval, socklen_t *
 ```
 Tái sử dụng socket, khi mà chờ phản hồi từ máy kết nối, socket vẫn chiếm giữ địa chỉ cổng và cổng không thể được liên kết với một mạch khác, trừ khi nó bị ngắt kết nối. Cách xử lý là set tham số SO_REUSEADDR trong setsockopt();
 # 4. Máy chủ TCP đa nhiệm (Multitasking TCP servers)
-fork(), tạo một tiến trình thông qua function call
+- Ý tưởng về máy chủ đa nhiệm là cho phép nhiều máy khách kết nối và trao đổi dữ liệu với cùng một máy chủ cùng một lúc.
+- Tiến trình là một chương trình đang chạy, mỗi tiến trình có bộ nhớ và tài nguyên được phân bổ cho nó, nhiều tiến trình có thể chạy cùng lúc.
+- Mỗi tiến trình sẽ có ID duy nhất trong hệ điều hành.
+- Để tạo một tiến trình, cần gọi hàm fork()
 ```
 #include <unistd.h>
 pid_t fork(void);
+  trả về Process ID (PID)
 ```
 
 # 3. UDP client-server connection
