@@ -161,8 +161,14 @@ pid_t fork(void);
 ```
 #include <sys/wait.h>
 pid_t wait(int *status);
-  (biến con trỏ status dùng để lưu thông tin kết thúc của tiến trình con.
-   nếu truyền NULL, thì kernel chỉ chờ tiến trình con kết thúc và thu hồi nó, không lưu thông tin kết thúc tiến trình con)
+  (biến con trỏ status dùng để lưu thông tin về cách tiến trình con kết thúc.
+   nếu truyền NULL, thì kernel chỉ chờ tiến trình con kết thúc và thu hồi nó, không lưu thông tin về cách tiến trình con kết thúc.
+   hàm này trả về pid của tiến trình con.)
+```
+- Hàm waitpid() là hàm tổng quát hơn hàm wait(), nó cho phép chờ một tiến trình có PID cụ thể, và các hành vi của nó có thể được sử đổi qua tham số options.
+```
+#include <sys/wait.h>
+pid_t waitpid(pid_t pid, int *status, int options);
 ```
 
 # 3. UDP client-server connection
