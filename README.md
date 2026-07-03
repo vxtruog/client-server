@@ -174,7 +174,7 @@ pid_t waitpid(pid_t pid, int *status, int options);
 
 # 5. Giao tiếp giữa các tiến trình (Inter-Process Communication - IPC)
 - IPC là tập hợp các cơ chế cho phép các tiến trình giao tiếp và đồng bộ hoạt động với nhau.
-- Pipe, cho phép một tiến trình gửi dữ liệu cho một tiến trình khác theo dạng luồng byte. Khi gọi pipe(), kernel sẽ tạo một đối tượng pipe gồm một pipe buffer và hai đầu giao tiếp (đầu đọc và đầu ghi). Sau đó, kernel trả về hai file descriptor (fd[0] và fd[1]) để các tiến trình sở hữu những file descriptor này có thể đọc dữ liệu từ hoặc ghi dữ liệu vào pipe.
+- Pipe, là cơ chế giao tiếp một chiều, cho phép một tiến trình gửi dữ liệu cho một tiến trình khác theo dạng luồng byte. Khi gọi pipe(), kernel sẽ tạo một đối tượng pipe gồm một pipe buffer và hai đầu giao tiếp (đầu đọc và đầu ghi). Sau đó, kernel trả về hai file descriptor (fd[0] và fd[1]) để các tiến trình sở hữu những file descriptor này có thể đọc dữ liệu từ hoặc ghi dữ liệu vào pipe.
 ```
 #include <unistd.h>
 int pipe(int fd[2]);
