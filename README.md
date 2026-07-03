@@ -157,6 +157,13 @@ pid_t fork(void);
    nếu tạo tiến trình thất bại, trả về -1.)
 ```
 - Tiến trình zombie là tiến trình con đã hoàn thành công việc và kết thúc thực thi, các tài nguyên thực thi của nó đã được hệ điều hành giải phóng, nhưng kernel vẫn giữ lại một mục trong bảng tiến trình (Process Table) chứa PID và trạng thái kết thúc vì tiến trình cha chưa gọi wait() hoặc waitpid() để thu hồi tiến trình con.
+- Hàm wait() là một system call dùng để chờ tiến trình con kết thúc, thu hồi tiến trình con, và lấy thông tin về cách tiến trình con kết thúc (nếu cần).
+```
+#include <sys/wait.h>
+pid_t wait(int *status);
+  (biến con trỏ status dùng để lưu thông tin kết thúc của tiến trình con.
+   nếu truyền NULL, thì kernel chỉ chờ tiến trình con kết thúc và thu hồi nó, không lưu thông tin kết thúc tiến trình con)
+```
 
 # 3. UDP client-server connection
 ```
