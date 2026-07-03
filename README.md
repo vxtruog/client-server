@@ -170,6 +170,7 @@ pid_t wait(int *status);
 #include <sys/wait.h>
 pid_t waitpid(pid_t pid, int *status, int options);
 ```
+- Signal ...
 
 # 3. UDP client-server connection
 ```
