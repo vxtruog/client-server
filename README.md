@@ -172,6 +172,9 @@ pid_t waitpid(pid_t pid, int *status, int options);
 ```
 - Signal ...
 
+# 5. Giao tiếp giữa các tiến trình (Inter-Process Communication - IPC)
+
+
 # 3. UDP client-server connection
 ```
 5 steps of UDP server
