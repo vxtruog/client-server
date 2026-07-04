@@ -180,6 +180,35 @@ pid_t waitpid(pid_t pid, int *status, int options);
 int pipe(int fd[2]);
   (trả về 0 nếu tạo pipe thành công, -1 nếu thất bại)
 ```
+# 6. Ghép kênh I/O (I/O Multiplexing)
+- Ghép kênh I/O cho phép một tiến trình máy chủ phục vụ đồng thời nhiều kết nối từ các máy khách.
+- Các bước để triển khai ghép kênh I/O
+```
+1. Cấu hình các file descriptor cần theo dõi.
+2. Chờ và phát hiện sự kiện I/O.
+3. Xử lý các file descriptor đã sẵn sàng.
+```
+- Cấu hình các file descriptor
+```
+Sử dụng kiểu dữ liệu fd_set, đây là một tập hợp các file descriptor.
+FD_ZERO(fd_set *fdset): cấu hình tập hợp rỗng.
+FD_SET(int fd, fd_set *fdset): thêm một file descriptor.
+FD_CLR(int fd, fd_set *fdset): xóa một file descriptor.
+FD_ISSET(int fd, fd_set *fdset): kiểm tra file descriptor có sẵn sàng hay không.
+```
+- Hàm select()
+```
+#include <sys/select.h>
+#include <sys/time.h>
+int select(int maxfd, fd_set *readset, fd_set *writeset, fd_set *exceptset, const struct timeval *timeout);
+```
+# 7. Multithreading TCP server
+- Luồng là đơn vị thực thi bên trong tiến trình, được chia sẻ các tài nguyên trong tiến trình đó.
+```
+#include <pthread.h>
+int pthread_create(pthread_t *restrict thread, const pthread_attr_t *restrict attr,
+                   void *(*start_routine)(*void), void *restrict arg);
+```
 # 3. UDP client-server connection
 ```
 5 steps of UDP server
