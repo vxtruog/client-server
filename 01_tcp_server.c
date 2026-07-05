@@ -14,6 +14,7 @@ int main()
   int serverSocketFd, clientSocketFd;
   struct sockaddr_in serverAddress, clientAddress;
   socklen_t clientAddressLength = sizeof(clientAddress);
+  ssize_t sentBytes;
   
   // create socket
   serverSocketFd = socket(AF_INET, SOCK_STREAM, 0);
@@ -68,7 +69,12 @@ int main()
   
   // comminucation
   char *msg = "hello, i'm Vu Xuan Truong.";
-  send(clientSocketFd, msg, strlen(msg), 0);
+  sentBytes = send(clientSocketFd, msg, strlen(msg), 0);
+  if(sentBytes == -1)
+  {
+    perror("send");
+    exit(EXIT_FAILURE);
+  }
   printf("the message \"%s\"\n", msg);
   
   // close
