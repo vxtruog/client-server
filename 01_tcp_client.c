@@ -42,7 +42,7 @@ int main()
 		printf("connected\n");
 	}
 	
-	// comminucation
+	// communication
 	char buf[128];
 	receivedBytes = recv(socketFd, buf, sizeof(buf) - 1, 0);
 	if(receivedBytes == -1)
