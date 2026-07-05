@@ -68,14 +68,15 @@ int main()
   }
   
   // comminucation
-  char *msg = "hello, i'm Vu Xuan Truong.";
+  const char *msg = "hello, i'm Vu Xuan Truong.";
   sentBytes = send(clientSocketFd, msg, strlen(msg), 0);
   if(sentBytes == -1)
   {
     perror("send");
     exit(EXIT_FAILURE);
   }
-  printf("the message \"%s\"\n", msg);
+  printf("Sent %zd bytes\n", sentBytes);
+  printf("Message: \"%s\"\n", msg);
   
   // close
   close(clientSocketFd);
