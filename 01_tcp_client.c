@@ -45,19 +45,19 @@ int main()
 	// comminucation
 	char buf[128];
 	receivedBytes = recv(socketFd, buf, sizeof(buf) - 1, 0);
-	if(receiveBytes == -1)
+	if(receivedBytes == -1)
 	{
 		perror("recv");
 		exit(EXIT_FAILURE);
 	}
-	else if(receiveBytes == 0)
+	else if(receivedBytes == 0)
 	{
 		printf("server disconnected\n");
 	}
 	else
 	{
-		buf[receiveBytes] = '\0';
-		printf("received %zd bytes\n", receiveBytes);
+		buf[receivedBytes] = '\0';
+		printf("received %zd bytes\n", receivedBytes);
 		printf("received : %s\n", buf);
 	}
 	
