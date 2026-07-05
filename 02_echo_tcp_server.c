@@ -94,7 +94,7 @@ int main(int argc, char *argv[])
 		{
 			buf[receivedBytes] = '\0';
 			printf("received %zd bytes\n", receivedBytes);
-			printf("received : %s\n", buf);
+			printf("received: %s\n", buf);
 		}
 
     // process
