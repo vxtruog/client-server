@@ -110,6 +110,7 @@ int connect(int clientfd, const struct sockaddr *addr, socklen_t addrlen);
 #include <sys/types.h>
 #include <sys/socket.h>
 int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen);
+  (trả về chỉ số socket descriptor mới cho client nếu thành công, -1 nếu thất bại)
 ```
 - Hàm `memset()` dùng để thao tác với bộ nhớ, ghi giá trị theo byte
 ```c
