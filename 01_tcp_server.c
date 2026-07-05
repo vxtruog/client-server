@@ -33,7 +33,7 @@ int main()
   serverAddress.sin_family = AF_INET;
   serverAddress.sin_addr.s_addr = htonl(INADDR_ANY);
   serverAddress.sin_port = htons(4444);
-  if(bind(serverSocketFd, (struct sockaddr *)&serverAddress, sizeof(serverAddress)) != 0)
+  if(bind(serverSocketFd, (struct sockaddr *)&serverAddress, sizeof(serverAddress)) == -1)
   {
     perror("bind");
     exit(EXIT_FAILURE);
@@ -44,7 +44,7 @@ int main()
   }
   
   // listen
-  if(listen(serverSocketFd, 1) != 0)
+  if(listen(serverSocketFd, 1) == -1)
   {
     perror("listen");
     exit(EXIT_FAILURE);
