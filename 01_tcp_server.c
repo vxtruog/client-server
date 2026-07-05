@@ -19,8 +19,8 @@ int main()
   serverSocketFd = socket(AF_INET, SOCK_STREAM, 0);
   if(serverSocketFd == -1)
   {
-    printf("failed to create a socket\n");
-    exit(1);
+    perror("socket");
+    exit(EXIT_FAILURE);
   }
   else
   {
@@ -34,8 +34,8 @@ int main()
   serverAddress.sin_port = htons(4444);
   if(bind(serverSocketFd, (struct sockaddr *)&serverAddress, sizeof(serverAddress)) != 0)
   {
-    printf("failed to bind\n");
-    exit(1);
+    perror("bind");
+    exit(EXIT_FAILURE);
   }
   else
   {
@@ -45,8 +45,8 @@ int main()
   // listen
   if(listen(serverSocketFd, 1) != 0)
   {
-    printf("failed to listen\n");
-    exit(1);
+    perror("listen");
+    exit(EXIT_FAILURE);
   }
   else
   {
@@ -58,8 +58,8 @@ int main()
   clientSocketFd = accept(serverSocketFd, (struct sockaddr *)&clientAddress, &clientAddressLength);
   if(clientSocketFd == -1)
   {
-    printf("failed to accept\n");
-    exit(1);
+    perror("accept");
+    exit(EXIT_FAILURE);
   }
   else
   {
