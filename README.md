@@ -204,11 +204,22 @@ int select(int maxfd, fd_set *readset, fd_set *writeset, fd_set *exceptset, cons
 ```
 # 7. Multithreading TCP server
 - Luồng là đơn vị thực thi bên trong tiến trình, được chia sẻ các tài nguyên trong tiến trình đó.
+- Để tạo một luồng mới, ta dùng hàm pthread_create()
 ```
 #include <pthread.h>
 int pthread_create(pthread_t *restrict thread, const pthread_attr_t *restrict attr,
                    void *(*start_routine)(*void), void *restrict arg);
 ```
+- Để chờ một luồng kết thúc và lấy giá trị trả về của luồng đó, ta dùng hàm pthread_join()
+```
+#include <pthread.h>
+int pthread_join(pthread_t thread, void **status);
+```
+- Đồng bộ thread
+
+# 8. DNS(Domain Name System)
+- DNS là một hệ thống mã hóa địa chỉ IP.
+
 # 3. UDP client-server connection
 ```
 5 steps of UDP server
