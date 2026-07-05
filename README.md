@@ -122,7 +122,9 @@ void *memset(void *s, int c, size_t n);
 ```c
 #include <sys/socket.h>
 ssize_t send(int sockfd, const void *buf, size_t len, int flags);
+  (trả về số byte được chép vào bộ đệm gửi của kernel, -1 nếu thất bại)
 ssize_t recv(int sockfd, void *buf, size_t len, int flags);
+  (trả về số byte đã đọc được, nếu bằng 0 thì do phía bên kia đã đóng kết nối một cách bình thường, -1 nếu thất bại)
 ```
 
 # 2. Vòng đời của TCP-server và TCP-client
