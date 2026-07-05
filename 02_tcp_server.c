@@ -98,7 +98,7 @@ int main(int argc, char *argv[])
 		}
 
     // process
-    snprintf(res, sizeof(res), "You entered: %s", buf);
+    snprintf(res, sizeof(res), "%s", buf);
 
     // send
     sentBytes = send(clientSocketFd, res, strlen(res), 0);
