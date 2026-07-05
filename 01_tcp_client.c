@@ -8,12 +8,18 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-int main()
+int main(int argc, char *argv[])
 {
 	// variables
 	int socketFd;
 	struct sockaddr_in serverAddress;
 	ssize_t receivedBytes;
+
+	if(argc != 3)
+	{
+		fprintf(stderr, "usage: %s <server_ip> <port>\n", argv[0]);
+		exit(EXIT_FAILURE);
+	}
 	
 	// create socket
 	socketFd = socket(AF_INET, SOCK_STREAM, 0);
@@ -30,8 +36,19 @@ int main()
 	// connect
 	memset(&serverAddress, 0, sizeof(serverAddress));
 	serverAddress.sin_family = AF_INET;
-	serverAddress.sin_addr.s_addr = inet_addr("127.0.0.1");
-	serverAddress.sin_port = htons(4444);
+	int ret = inet_pton(AF_INET, argv[1], &serverAddress.sin_addr);
+	if(ret == 0)
+	{
+		fprintf(stderr, "invalid IP address\n");
+		exit(EXIT_FAILURE);
+	}
+	else if(ret == -1)
+	{
+		perror("inet_pton");
+		exit(EXIT_FAILURE);
+	}
+	serverAddress.sin_port = htons(atoi(argv[2]));
+	
 	if(connect(socketFd, (struct sockaddr*)&serverAddress, sizeof(serverAddress)) == -1)
 	{
 		perror("connect");
