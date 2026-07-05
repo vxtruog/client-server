@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
 	}
 	else
 	{
-		printf("socket : %d\n", socketFd);
+		printf("socket: %d\n", socketFd);
 	}
 	
 	// connect
@@ -97,7 +97,7 @@ int main(int argc, char *argv[])
 		{
 			res[receivedBytes] = '\0';
 			printf("received %zd bytes\n", receivedBytes);
-			printf("received : %s\n\n", res);
+			printf("received: %s\n\n", res);
 		}
 	}
 	
