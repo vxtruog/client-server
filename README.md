@@ -143,7 +143,7 @@ int shutdown(int sockfd, int how);
 ```
 
 # 2. Vòng đời của TCP-server và TCP-client
-<img src="/image/tcp.jpeg" alt="Hình 1" width="90%">
+<img src="/image/tcp.png" alt="Hình 1" width="90%">
 
 # 3. Thuộc tính của socket
 Truy xuất thuộc tính của socket
