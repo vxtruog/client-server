@@ -88,6 +88,7 @@ int socket(int domain, int type, int protocol);
 ```
 - Hàm `bind()` yêu cầu kernel liên kết địa chỉ socket của máy chủ trong `addr` với socket descriptor `sockfd`
 ```c
+#include <sys/types.h>
 #include <sys/socket.h>
 int bind(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
   (trả về 0 nếu thành công, -1 nếu thất bại)
@@ -100,6 +101,7 @@ int listen(int sockfd, int backlog);
 ``` 
 - Hàm `connect()`, một máy khách cố gắng thiết lập kết nối internet với máy chủ tại địa chỉ socket `addr`
 ```c
+#include <sys/types.h>
 #include <sys/socket.h>
 int connect(int clientfd, const struct sockaddr *addr, socklen_t addrlen);
   (trả về 0 nếu thành công, -1 nếu thất bại)
@@ -120,11 +122,24 @@ void *memset(void *s, int c, size_t n);
 ```
 - Hàm `send()` và `recv()` dùng để trao đổi dữ liệu sau khi kết nối TCP được thiết lập
 ```c
+#include <sys/types.h>
 #include <sys/socket.h>
 ssize_t send(int sockfd, const void *buf, size_t len, int flags);
   (trả về số byte được chép vào bộ đệm gửi của kernel, -1 nếu thất bại)
 ssize_t recv(int sockfd, void *buf, size_t len, int flags);
   (trả về số byte đã đọc được, nếu bằng 0 tức là phía bên kia đã đóng kết nối một cách bình thường, -1 nếu thất bại)
+```
+- Hàm `close()` dùng để đóng và giải phóng một socket descriptor
+```c
+#include <unistd.h>
+int close(int sockfd);
+  (trả về 0 nếu thành công, -1 nếu thất bại)
+```
+- Hàm `close()` đóng toàn bộ socket ở phía tiến trình gọi nó, khiến tiến trình đó không thể tiếp tục gửi hoặc nhận dữ liệu. Trong trường hợp nếu chỉ một đầu gọi `close()`, đầu bên kia vẫn đang truyền dữ liệu thì có thể gây ra sự cố, khi đó chúng ta sẽ dùng TCP Half-close. Bằng cách dùng lệnh `shutdown()`, ta có thể ngắt riêng phần đọc hoặc phần ghi, hoặc cả hai phần mà không giải phóng socket descriptor ngay lập tức (sau khi dùng xong vẫn phải gọi `close()` để giải phóng tài nguyên).
+```c
+#include <sys/socket.h>
+int shutdown(int sockfd, int how);
+  (trả về 0 nếu thành công, -1 nếu thất bại)
 ```
 
 # 2. Vòng đời của TCP-server và TCP-client
