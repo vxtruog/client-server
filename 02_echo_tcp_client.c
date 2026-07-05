@@ -64,6 +64,7 @@ int main(int argc, char *argv[])
 	char res[128];
 	while(1)
 	{
+		// data input
 		printf("Japanese >> ");
 		fflush(stdout);
 		if(fgets(buf, sizeof(buf), stdin) == NULL)
@@ -72,7 +73,8 @@ int main(int argc, char *argv[])
 		  break;
 		}
 		buf[strcspn(buf, "\n")] = '\0';
-	
+
+		// send
 		sentBytes = send(socketFd, buf, strlen(buf), 0);
 		if(sentBytes == -1)
 		{
@@ -81,7 +83,8 @@ int main(int argc, char *argv[])
 		}
 		printf("sent %zd bytes\n", sentBytes);
 		printf("message: \"%s\"\n", buf);
-	
+
+		// receive
 		receivedBytes = recv(socketFd, res, sizeof(res) - 1, 0);
 		if(receivedBytes == -1)
 		{
