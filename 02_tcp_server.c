@@ -108,7 +108,7 @@ int main(int argc, char *argv[])
       break;
     }
     printf("sent %zd bytes\n", sentBytes);
-    printf("message: \"%s\"\n", res);
+    printf("message: \"%s\"\n\n", res);
   }
 
   // close
