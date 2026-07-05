@@ -60,47 +60,46 @@ int main(int argc, char *argv[])
 	}
 	
 	// communication
-  char buf[128];
-  char res[128];
-  while(1)
-  {
-    printf("Japanese >> ");
-    fflush(stdout);
-    if(fgets(buf, sizeof(buf), stdin) == NULL)
-    {
-      printf("\nexit (CTRL + D)\n");
-      break;
-    }
-    buf[strcspn(buf, "\n")] = '\0';
-
-    sentBytes = send(socketFd, buf, strlen(buf), 0);
-    if(sentBytes == -1)
-    {
-      perror("send");
-      break;
-    }
-    printf("sent %zd bytes\n", sentBytes);
-    printf("message: \"%s\"\n", buf);
-
-
-    receivedBytes = recv(socketFd, res, sizeof(res) - 1, 0);
-  	if(receivedBytes == -1)
-  	{
-  		perror("recv");
-  		break;
-  	}
-  	else if(receivedBytes == 0)
-  	{
-  		printf("server disconnected\n");
-      break;
-  	}
-  	else
-  	{
-  		res[receivedBytes] = '\0';
-  		printf("received %zd bytes\n", receivedBytes);
-  		printf("received : %s\n", res);
-  	}
-  }
+	char buf[128];
+	char res[128];
+	while(1)
+	{
+		printf("Japanese >> ");
+		fflush(stdout);
+		if(fgets(buf, sizeof(buf), stdin) == NULL)
+		{
+		  printf("\nexit (CTRL + D)\n");
+		  break;
+		}
+		buf[strcspn(buf, "\n")] = '\0';
+	
+		sentBytes = send(socketFd, buf, strlen(buf), 0);
+		if(sentBytes == -1)
+		{
+		  perror("send");
+		  break;
+		}
+		printf("sent %zd bytes\n", sentBytes);
+		printf("message: \"%s\"\n", buf);
+	
+		receivedBytes = recv(socketFd, res, sizeof(res) - 1, 0);
+		if(receivedBytes == -1)
+		{
+			perror("recv");
+			break;
+		}
+		else if(receivedBytes == 0)
+		{
+			printf("server disconnected\n");
+		  break;
+		}
+		else
+		{
+			res[receivedBytes] = '\0';
+			printf("received %zd bytes\n", receivedBytes);
+			printf("received : %s\n", res);
+		}
+	}
 	
 	// close
 	close(socketFd);
