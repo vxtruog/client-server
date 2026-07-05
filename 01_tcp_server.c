@@ -2,6 +2,10 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
+
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
 #include <arpa/inet.h>
 
 int main()
@@ -9,7 +13,7 @@ int main()
   // variables
   int serverSocketFd, clientSocketFd;
   struct sockaddr_in serverAddress, clientAddress;
-  int clientAddressLength;
+  socklen_t clientAddressLength = sizeof(clientAddress);
   
   // create socket
   serverSocketFd = socket(AF_INET, SOCK_STREAM, 0);
