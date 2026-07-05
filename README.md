@@ -145,22 +145,14 @@ int shutdown(int sockfd, int how);
 # 2. Vòng đời của TCP-server và TCP-client
 <img src="/image/tcp.jpeg" alt="Hình 1" width="90%">
 
-# 3. Half-closed TCP connection
-close(), function call => kết thúc hoàn toàn kết nối trên cả hai đầu cuối. Trong trường hợp nếu chỉ một đầu gọi close(), đầu bên kia vẫn đang truyền dữ liệu thì có thể gây ra sự cố.
-Khi đó chúng ta sẽ dùng TCP Half-close, nó cho phép chỉ một trong các máy chấm dứt kết nối đi ra của nó, thay vì chấm dứt toàn bộ socket, nó vẫn nhận được dữ liệu từ đầu kia 
-Điều này đạt được bằng cách dùng lệnh shutdown()
-```
-#include <sys/socket.h>
-int shutdown(int sock, int howto);
-```
-
+# 3. Thuộc tính của socket
 Truy xuất thuộc tính của socket
-```
+```c
 #include <sys/socket.h>
 int getsockopt(int sock, int level, int optname, void* optval, socklen_t *optlen);
 ```
 Thiết lập tùy chọn của socket
-```
+```c
 #include <sys/socket.h>
 int setsockopt(int sock, int level, int optname, const void* optval, socklen_t *optlen);
 ```
