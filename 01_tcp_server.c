@@ -75,8 +75,8 @@ int main()
     perror("send");
     exit(EXIT_FAILURE);
   }
-  printf("Sent %zd bytes\n", sentBytes);
-  printf("Message: \"%s\"\n", msg);
+  printf("sent %zd bytes\n", sentBytes);
+  printf("message: \"%s\"\n", msg);
   
   // close
   close(clientSocketFd);
