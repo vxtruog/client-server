@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
 	}
 	else
 	{
-		printf("socket: %d\n", serverSocketFd);
+		printf("server socket fd: %d\n", serverSocketFd);
 	}
 	
 	int opt = 1;
@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
 	}
 	else
 	{
-		printf("listening...\n");
+		printf("listening...\n\n");
 	}
 	
 	// accept
@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
 	}
 	else
 	{
-		printf("accepted\n");
+		printf("accepted, client [fd=%d, pid=%d] %s:%d connected\n\n", clientSocketFd, getpid(), inet_ntoa(clientAddress.sin_addr), ntohs(clientAddress.sin_port));
 	}
 	
 	// comminucation
@@ -90,14 +90,14 @@ int main(int argc, char *argv[])
 		}
 		else if(receivedBytes == 0)
 		{
-			printf("client disconnected\n");
-		  break;
+			printf("client [fd=%d, pid=%d] %s:%d disconnected\n\n", clientSocketFd, getpid(), inet_ntoa(clientAddress.sin_addr), ntohs(clientAddress.sin_port));
+		  	break;
 		}
 		else
 		{
 			buf[receivedBytes] = '\0';
-			printf("received %zd bytes\n", receivedBytes);
-			printf("received: %s\n", buf);
+			printf("from client [fd=%d, pid=%d] %s:%d\n", clientSocketFd, getpid(), inet_ntoa(clientAddress.sin_addr), ntohs(clientAddress.sin_port));
+	    	printf("received (%zd bytes): %s\n", receivedBytes, buf);
 		}
 		
 		// process
@@ -110,8 +110,7 @@ int main(int argc, char *argv[])
 			perror("send");
 			break;
 		}
-		printf("sent %zd bytes\n", sentBytes);
-		printf("message: \"%s\"\n\n", res);
+		printf("sent (%zd bytes): %s\n\n", sentBytes, res);
 	}
 	
 	// close
