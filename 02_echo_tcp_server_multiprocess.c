@@ -106,7 +106,7 @@ int main(int argc, char *argv[])
 	    		else if(receivedBytes == 0)
 	    		{
 	    			printf("client [fd=%d, pid=%d] %s:%d disconnected\n\n", clientSocketFd, getpid(), inet_ntoa(clientAddress.sin_addr), ntohs(clientAddress.sin_port));
-	    		  break;
+	    		  	break;
 	    		}
 	    		else
 	    		{
