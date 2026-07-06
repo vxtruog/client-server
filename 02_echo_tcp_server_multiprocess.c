@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
 	}
 	else
 	{
-		printf("server socket: %d\n", serverSocketFd);
+		printf("server socket fd: %d\n", serverSocketFd);
 	}
 	
 	int opt = 1;
@@ -75,7 +75,7 @@ int main(int argc, char *argv[])
 	  	}
 	  	else
 	  	{
-	  		printf("accepted, client socket: %d\n", clientSocketFd);
+			printf("accepted, client [fd=%d, pid=%d] %s:%d connected\n\n", clientSocketFd, getpid(), inet_ntoa(clientAddress.sin_addr), ntohs(clientAddress.sin_port));
 	  	}
 	  
 	    pid_t p = fork();
@@ -105,13 +105,13 @@ int main(int argc, char *argv[])
 	    		}
 	    		else if(receivedBytes == 0)
 	    		{
-	    			printf("disconnected, client socket: %d\n\n", clientSocketFd);
+	    			printf("client [fd=%d, pid=%d] %s:%d disconnected\n\n", clientSocketFd, getpid(), inet_ntoa(clientAddress.sin_addr), ntohs(clientAddress.sin_port));
 	    		  break;
 	    		}
 	    		else
 	    		{
 	    			buf[receivedBytes] = '\0';
-					printf("from client socket: %d\n", clientSocketFd);
+					printf("from client [fd=%d, pid=%d] %s:%d\n", clientSocketFd, getpid(), inet_ntoa(clientAddress.sin_addr), ntohs(clientAddress.sin_port));
 	    			printf("received (%zd bytes): %s\n", receivedBytes, buf);
 	    		}
 	    		
