@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
 	}
 	else
 	{
-		printf("socket: %d\n", socketFd);
+		printf("socket fd: %d\n", socketFd);
 	}
 	
 	// connect
@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
 	}
 	else
 	{
-		printf("connected\n");
+		printf("connected\n\n");
 	}
 	
 	// communication
