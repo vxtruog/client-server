@@ -142,22 +142,7 @@ int shutdown(int sockfd, int how);
   (trả về 0 nếu thành công, -1 nếu thất bại)
 ```
 
-# 2. Vòng đời của TCP-server và TCP-client
-<img src="/image/tcp.png" alt="Hình 1" width="90%">
-
-# 3. Thuộc tính của socket
-Truy xuất thuộc tính của socket
-```c
-#include <sys/socket.h>
-int getsockopt(int sock, int level, int optname, void* optval, socklen_t *optlen);
-```
-Thiết lập tùy chọn của socket
-```c
-#include <sys/socket.h>
-int setsockopt(int sock, int level, int optname, const void* optval, socklen_t *optlen);
-```
-Tái sử dụng socket, khi mà chờ phản hồi từ máy kết nối, socket vẫn chiếm giữ địa chỉ cổng và cổng không thể được liên kết với một mạch khác, trừ khi nó bị ngắt kết nối. Cách xử lý là set tham số SO_REUSEADDR trong setsockopt();
-# 4. Máy chủ TCP đa nhiệm (Multitasking TCP servers)
+## 1.5. Các lệnh gọi hệ thống phục vụ cho server đa tiến trình
 - Để tạo một tiến trình, ta gọi hàm fork(). Khi đó, hệ điều hành tạo một tiến trình con mới có PID riêng, tiến trình con kế thừa toàn bộ ngữ cảnh của tiến trình cha.
 ```
 #include <unistd.h>
@@ -180,7 +165,26 @@ pid_t wait(int *status);
 #include <sys/wait.h>
 pid_t waitpid(pid_t pid, int *status, int options);
 ```
-- Signal ...
+
+# 2. Triển khai TCP-server và TCP-client
+## 2.1. Vòng đời của TCP-server và TCP-client
+<img src="/image/tcp.png" alt="Hình 1" width="90%">
+
+## 2.2. Triển khai TCP-server đa nhiệm
+- Khi một máy khách gửi yêu cầu kết nối, máy chủ đang ở trạng thái lắng nghe sẽ gọi `accept()` để chấp nhận kết nối và tạo ra một socket mới dùng riêng cho phiên giao tiếp với máy khách. Sau đó, máy chủ gọi `fork()` để tạo một tiến trình con. Tiến trình con kế thừa các socket descriptor đang mở của tiến trình cha, bao gồm socket lắng nghe (serverSocketFd) và socket kết nối (clientSocketFd). Để phân chia nhiệm vụ, tiến trình con đóng socket lắng nghe vì chỉ chịu trách nhiệm phục vụ máy khách, còn tiến trình cha đóng socket kết nối và tiếp tục gọi `accept()` để chờ các yêu cầu kết nối mới. Nhờ đó, máy chủ có thể phục vụ nhiều máy khách đồng thời, mỗi kết nối được xử lý bởi một tiến trình con riêng.
+
+# 3. Thuộc tính của socket
+Truy xuất thuộc tính của socket
+```c
+#include <sys/socket.h>
+int getsockopt(int sock, int level, int optname, void* optval, socklen_t *optlen);
+```
+Thiết lập tùy chọn của socket
+```c
+#include <sys/socket.h>
+int setsockopt(int sock, int level, int optname, const void* optval, socklen_t *optlen);
+```
+Tái sử dụng socket, khi mà chờ phản hồi từ máy kết nối, socket vẫn chiếm giữ địa chỉ cổng và cổng không thể được liên kết với một mạch khác, trừ khi nó bị ngắt kết nối. Cách xử lý là set tham số SO_REUSEADDR trong setsockopt();
 
 # 5. Giao tiếp giữa các tiến trình (Inter-Process Communication - IPC)
 - IPC là tập hợp các cơ chế cho phép các tiến trình giao tiếp và đồng bộ hoạt động với nhau.
