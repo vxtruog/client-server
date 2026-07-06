@@ -65,12 +65,12 @@ int main(int argc, char *argv[])
 	while(1)
 	{
 		// data input
-		printf("Japanese >> ");
+		printf("data input >> ");
 		fflush(stdout);
 		if(fgets(buf, sizeof(buf), stdin) == NULL)
 		{
-		  printf("\nexit (CTRL + D)\n");
-		  break;
+			printf("\nexit (CTRL + D)\n");
+			break;
 		}
 		buf[strcspn(buf, "\n")] = '\0';
 
@@ -78,11 +78,10 @@ int main(int argc, char *argv[])
 		sentBytes = send(socketFd, buf, strlen(buf), 0);
 		if(sentBytes == -1)
 		{
-		  perror("send");
-		  break;
+			perror("send");
+			break;
 		}
-		printf("sent %zd bytes\n", sentBytes);
-		printf("message: \"%s\"\n", buf);
+		printf("sent (%zd bytes): %s\n", sentBytes, buf);
 
 		// receive
 		receivedBytes = recv(socketFd, res, sizeof(res) - 1, 0);
@@ -94,13 +93,12 @@ int main(int argc, char *argv[])
 		else if(receivedBytes == 0)
 		{
 			printf("server disconnected\n");
-		  break;
+		  	break;
 		}
 		else
 		{
 			res[receivedBytes] = '\0';
-			printf("received %zd bytes\n", receivedBytes);
-			printf("received: %s\n\n", res);
+			printf("received (%zd bytes): %s\n\n", receivedBytes, res);
 		}
 	}
 	
