@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
 	}
 	else
 	{
-		printf("socket: %d\n", serverSocketFd);
+		printf("server socket: %d\n", serverSocketFd);
 	}
 	
 	int opt = 1;
@@ -60,85 +60,86 @@ int main(int argc, char *argv[])
 	}
 	else
 	{
-		printf("listening...\n");
+		printf("listening...\n\n");
 	}
-
-  while(1)
-  {
-    // accept
-  	memset(&clientAddress, 0, sizeof(clientAddress));
-  	clientSocketFd = accept(serverSocketFd, (struct sockaddr *)&clientAddress, &clientAddressLength);
-  	if(clientSocketFd == -1)
-  	{
-  		perror("accept");
-  		exit(EXIT_FAILURE);
-  	}
-  	else
-  	{
-  		printf("accepted\n");
-  	}
-  
-    pid_t p = fork();
-    if(p == -1)
-    {
-      perror("fork");
-      // close clientSocketFd (parent process)
-      close(clientSocketFd);
-      continue;
-    }
-    else if(p == 0)
-    {
-      // close serverSocketFd (child process)
-      close(serverSocketFd);
-  
-      // comminucation
-    	char buf[128];
-    	char res[128];
-    	while(1)
-    	{
-    		// receive
-    		receivedBytes = recv(clientSocketFd, buf, sizeof(buf) - 1, 0);
-    		if(receivedBytes == -1)
-    		{
-    			perror("recv");
-    			break;
-    		}
-    		else if(receivedBytes == 0)
-    		{
-    			printf("client disconnected\n");
-    		  break;
-    		}
-    		else
-    		{
-    			buf[receivedBytes] = '\0';
-    			printf("received (%zd bytes): %s\n", receivedBytes, buf);
-    		}
-    		
-    		// process
-    		snprintf(res, sizeof(res), "%s", buf);
-    		
-    		// send
-    		sentBytes = send(clientSocketFd, res, strlen(res), 0);
-    		if(sentBytes == -1)
-    		{
-    			perror("send");
-    			break;
-    		}
-    		printf("sent (%zd bytes): %s\n\n", sentBytes, res);
-    	}
-      
-      // close clientSocketFd (child process)
-      close(clientSocketFd);
-      exit(EXIT_SUCCESS);
-    }
-    else
-    {
-      // close clientSocketFd (parent process)
-      close(clientSocketFd);
-    }  
-  }
-
-  // close serverSocketFd (parent process)
+	
+	while(1)
+	{
+		// accept
+		memset(&clientAddress, 0, sizeof(clientAddress));
+		clientSocketFd = accept(serverSocketFd, (struct sockaddr *)&clientAddress, &clientAddressLength);
+	  	if(clientSocketFd == -1)
+	  	{
+	  		perror("accept");
+	  		exit(EXIT_FAILURE);
+	  	}
+	  	else
+	  	{
+	  		printf("accepted, client socket: %d\n", clientSocketFd);
+	  	}
+	  
+	    pid_t p = fork();
+	    if(p == -1)
+	    {
+			perror("fork");
+			// close clientSocketFd (parent process)
+			close(clientSocketFd);
+			continue;
+	    }
+	    else if(p == 0)
+	    {
+			// close serverSocketFd (child process)
+			close(serverSocketFd);
+			
+			// comminucation
+	    	char buf[128];
+	    	char res[128];
+	    	while(1)
+	    	{
+	    		// receive
+	    		receivedBytes = recv(clientSocketFd, buf, sizeof(buf) - 1, 0);
+	    		if(receivedBytes == -1)
+	    		{
+	    			perror("recv");
+	    			break;
+	    		}
+	    		else if(receivedBytes == 0)
+	    		{
+	    			printf("disconnected, client socket: %d\n\n", clientSocketFd);
+	    		  break;
+	    		}
+	    		else
+	    		{
+	    			buf[receivedBytes] = '\0';
+					printf("from client socket: %d\n", clientSocketFd);
+	    			printf("received (%zd bytes): %s\n", receivedBytes, buf);
+	    		}
+	    		
+	    		// process
+	    		snprintf(res, sizeof(res), "%s", buf);
+	    		
+	    		// send
+	    		sentBytes = send(clientSocketFd, res, strlen(res), 0);
+	    		if(sentBytes == -1)
+	    		{
+	    			perror("send");
+	    			break;
+	    		}
+	    		printf("sent (%zd bytes): %s\n\n", sentBytes, res);
+	    	}
+			
+			// close clientSocketFd (child process)
+			close(clientSocketFd);
+			exit(EXIT_SUCCESS);
+	    }
+	    else
+	    {
+	      // close clientSocketFd (parent process)
+	      close(clientSocketFd);
+	    }
+	}
+	
+	// close serverSocketFd (parent process)
 	close(serverSocketFd);
 	printf("server socket closed\n");
 	
