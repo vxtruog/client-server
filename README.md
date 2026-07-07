@@ -144,7 +144,7 @@ int shutdown(int sockfd, int how);
 
 ## 1.5. Các lệnh gọi hệ thống phục vụ cho server đa tiến trình
 - Để tạo một tiến trình, ta gọi hàm fork(). Khi đó, hệ điều hành tạo một tiến trình con mới có PID riêng, tiến trình con kế thừa toàn bộ ngữ cảnh của tiến trình cha.
-```
+```c
 #include <unistd.h>
 pid_t fork(void);
   (trong tiến trình cha, fork() trả về PID của tiến trình con, tức là một số nguyên dương.
@@ -152,18 +152,34 @@ pid_t fork(void);
    nếu tạo tiến trình thất bại, trả về -1.)
 ```
 - Tiến trình zombie là tiến trình con đã hoàn thành công việc và kết thúc thực thi, các tài nguyên thực thi của nó đã được hệ điều hành giải phóng, nhưng kernel vẫn giữ lại một mục trong bảng tiến trình (Process Table) chứa PID và trạng thái kết thúc vì tiến trình cha chưa gọi wait() hoặc waitpid() để thu hồi tiến trình con.
-- Hàm wait() là một system call dùng để chờ tiến trình con kết thúc, thu hồi tiến trình con, và lấy thông tin về cách tiến trình con kết thúc (nếu cần).
+- Hàm waitpid() có chức năng thu hồi các tiến trình con đã kết thúc, tránh tạo tiến trình zombie.
 ```
-#include <sys/wait.h>
-pid_t wait(int *status);
-  (biến con trỏ status dùng để lưu thông tin về cách tiến trình con kết thúc.
-   nếu truyền NULL, thì kernel chỉ chờ tiến trình con kết thúc và thu hồi nó, không lưu thông tin về cách tiến trình con kết thúc.
-   hàm này trả về pid của tiến trình con.)
-```
-- Hàm waitpid() là hàm tổng quát hơn hàm wait(), nó cho phép chờ một tiến trình có PID cụ thể, và các hành vi của nó có thể được sử đổi qua tham số options.
-```
+#include <sys/types.h>
 #include <sys/wait.h>
 pid_t waitpid(pid_t pid, int *status, int options);
+  (trả về PID của tiến trình con vừa có trạng thái thay đổi,
+   trả về 0 nếu không có tiến trình nào thay đổi trạng thái,
+   trả về -1 nếu xảy ra lỗi.)
+- Tham số pid:
+  + pid > 0: chờ đúng tiến trình có PID đó.
+  + pid == -1: chờ bất kỳ tiến trình con nào.
+  + pid == 0: chờ tiến trình con thuộc cùng nhóm tiến trình với tiến trình gọi.
+  + pid < -1: chờ các tiến trình thuộc một nhớm tiến trình cụ thể.
+- Tham số status: chứa nhiều thông tin về cách tiến trình con thay đổi trạng thái, khi đọc các thông tin này, ta dùng các macro
+  + WIFEXITED(status): tiến trình con kết thúc bình thường bằng exit() hoặc return.
+  + WEXITSTATUS(status): lấy mã trả về của exit(), dùng khi WIFEXITED(status) đúng.
+  + WIFSIGNALED(status): tiến trình con bị kết thúc bởi signal.
+  + WTERMSIG(status): lấy số signal đã giết tiến trình con, dùng khi WIFSIGNALED(status) đúng.
+  + WIFSTOPPED(status): tiến trình con đang bị stop bởi signal.
+  + WSTOPSIG(status): lấy số signal đã làm tiến trình con bị stop, dùng khi WIFSTOPPED(status) đúng.
+  + WIFCONTINUED(status): tiến trình con được tiếp tục chạy sau SIGCONT.
+  + WCOREDUMP(status): có được tạo core dump không, dùng khi WIFSIGNALED(status) đúng.
+- Tham số options:
+  + options == 0: chờ cho đến khi tiến trình con kết thúc hoặc thay đổi trạng thái mà waitpid() mặc định theo dõi.
+  + options == WNOHANG: nếu chưa có tiến trình con nào thay đổi trạng thái thì trả về ngay với giá trị 0, không chờ.
+  + options == WUNTRACED: thông báo cả trường hợp tiến trình con bị dừng bởi SIGSTOP/SIGTSTP, khi đó có thể kiểm tra bằng WIFSTOPPED(status).
+  + options == WCONTINUED: thông báo khi tiến trình con được tiếp tục chạy sau khi nhận SIGCONT, khi đó có thể kiểm tra bằng WIFCONTINUED(status).
+  + có thể OR các options khác nhau để dùng nhiều tính năng.
 ```
 
 # 2. Triển khai TCP-server và TCP-client
