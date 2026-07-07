@@ -183,6 +183,32 @@ pid_t waitpid(pid_t pid, int *status, int options);
   + options == WCONTINUED: thông báo khi tiến trình con được tiếp tục chạy sau khi nhận SIGCONT, khi đó có thể kiểm tra bằng WIFCONTINUED(status).
   + có thể OR các options khác nhau để dùng nhiều tính năng.
 ```
+## 1.6. Signal
+- Signal trong lập trình socket
+```
+- Tiến trình quản lý:
+  + SIGCHILD: thông báo cho tiến trình cha rằng một tiến trình con đã thay đổi trạng thái.
+  + SIGTERM: yêu cầu một tiến trình kết thúc một cách bình thường
+  + SIGINT: thông báo người dùng muốn ngắt chương trình
+  + SIGKILL: buộc kernel tiêu diệt tiến trình ngay lập tức
+- Kết nối mạng:
+  + SIGPIPE: thông báo rằng chương trình đang ghi dữ liệu vào một kết nối đã bị đóng
+  + SIGURG: thông báo socket nhận được TCP Urgent Data
+- Time out/ Event:
+  + SIGALARM: thông báo đã hết thời gian hẹn trước
+  + SIGIO: thông báo rằng một file descriptor đã sẵn sàng cho I/O
+- Người dùng định nghĩa:
+  + SIGUSR1
+  + SIGUSR2
+```
+- Hàm `sigaction()` để đăng ký signal handler
+```c
+#include <signal.h>
+int sigaction(
+    int signum,
+    const struct sigaction *act,
+    struct sigaction *oldact);
+```
 
 # 2. Triển khai TCP-server và TCP-client
 ## 2.1. Vòng đời của TCP-server và TCP-client
