@@ -153,7 +153,7 @@ pid_t fork(void);
 ```
 - Tiến trình zombie là tiến trình con đã hoàn thành công việc và kết thúc thực thi, các tài nguyên thực thi của nó đã được hệ điều hành giải phóng, nhưng kernel vẫn giữ lại một mục trong bảng tiến trình (Process Table) chứa PID và trạng thái kết thúc vì tiến trình cha chưa gọi wait() hoặc waitpid() để thu hồi tiến trình con.
 - Hàm waitpid() có chức năng thu hồi các tiến trình con đã kết thúc, tránh tạo tiến trình zombie.
-```
+```c
 #include <sys/types.h>
 #include <sys/wait.h>
 pid_t waitpid(pid_t pid, int *status, int options);
