@@ -160,6 +160,8 @@ pid_t waitpid(pid_t pid, int *status, int options);
   (trả về PID của tiến trình con vừa có trạng thái thay đổi,
    trả về 0 nếu không có tiến trình nào thay đổi trạng thái,
    trả về -1 nếu xảy ra lỗi.)
+```
+```
 - Tham số pid:
   + pid > 0: chờ đúng tiến trình có PID đó.
   + pid == -1: chờ bất kỳ tiến trình con nào.
