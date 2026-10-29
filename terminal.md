@@ -1,4 +1,7 @@
 # Mở tài liệu hướng dẫn
+```
+sudo apt install man-db manpages-dev
+```
 __man (x) (name)__
 - Các giá trị của x gồm:
 ```
