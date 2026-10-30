@@ -5,6 +5,7 @@ Có hai nhóm khóa chính:
 - Mật mã khóa công khai
   + Nhiều người gửi dùng chung khóa công khai để mã hóa.
   + Người nhận có khóa bí mật để giải mã.
+Ngoài ra còn có thuật toán băm (mã hóa một chiều)
 ```
 
 ```
@@ -23,4 +24,10 @@ Mật mã Double Transposition:
 Mật mã One-time Pad:
 - Chuyển các chữ thành các cụm bit, tạo một mã khóa bit tương ứng, XOR mã khóa bit để mã hóa/giải mã.
 - Khá an toàn, nhưng mã khóa bit phải dài bằng cụm bit của văn bản cần mã hóa.
+```
+
+```
+Nguyên lý thiết kế mật mã:
+- Confusion: Làm cho mối quan hệ giữa khóa bí mật và ciphertext trở nên phức tạp.
+- Diffusion: Làm cho ảnh hưởng của một bit trong plaintext lan rộng ra nhiều bit trong ciphertext.
 ```
