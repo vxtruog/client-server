@@ -2,6 +2,9 @@
 Có hai nhóm khóa chính:
 - Mật mã khóa đối xứng
   + Người gửi và người nhận sử dụng cùng một khóa bí mật để mã hóa và giải mã.
+  + Có hai loại mã hóa đối xứng khác nhau:
+    ++ Stream cipher: mã hóa dữ liệu từng bit hoặc từng byte liên tục (như one-time pad)
+    ++ Block cipher: chia dữ liệu thành các khối có kích thước cố định rồi mã hóa từng khối.
 - Mật mã khóa công khai
   + Nhiều người gửi dùng chung khóa công khai để mã hóa.
   + Người nhận có khóa bí mật để giải mã.
