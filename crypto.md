@@ -36,7 +36,7 @@ Nguyên lý thiết kế mật mã:
 ```
 
 ```
-Mật mã A5/1:
+A5/1 Stream Cipher:
 - A5/1 có ba thanh ghi LFSR (Linear Feedback Shift Register)
   + R1 - 19 bit - vị trí tap XOR (13, 16, 17, 18)
   + R2 - 22 bit - vị trí tap XOR (20, 21)
