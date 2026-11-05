@@ -73,3 +73,26 @@ A5/1 Stream Cipher:
   + Keystream[i] = R1[18] XOR R2[21] XOR R3[22]
   + Lặp lại cho đến khi tạo đủ số bit keystream cần thiết.
 ```
+
+```
+RC4 Stream Cipher:
+- Mảng trạng thái S
+  + Gồm 256 phần tử, mỗi phần tử là một byte, ban đầu khởi tạo theo thứ tự tăng dần từ 0 -> 255
+    ++ S[i] = i
+  + Trong quá trình hoạt động, RC4 sẽ tráo đổi thứ tự các phần tử của S
+- KSA (Key Scheduling Algorithm)
+  + Đầu vào là mảng trạng thái S và mảng khóa bí mật K
+  + Mỗi phần tử của khóa bí mật K là một byte, độ dài của mảng khóa bí mật K thường từ 1 đến 256 byte.
+    ++ K = (K[0], K[1], ..., K[L-1])
+  + Xáo trộn S, ban đầu khởi tạo j = 0, thực hiện 256 vòng:
+    ++ j = (j + S[i] + K[i mod L]) mod 256
+    ++ Tráo đổi S[i] và S[j]
+- PRGA (Pseudo-Random Generation Algorithm)
+  + Giữ nguyên mảng trạng thái S sau KSA, khởi tạo lại i = 0 và j = 0
+  + Thực hiện các bước sau, lặp lại cho đến khi tạo đủ số byte keystream cần thiết
+    ++ i = (i + 1) mod 256
+    ++ j = (j + S[i]) mod 256
+    ++ Tráo đổi S[i] và S[j]
+    ++ t = (S[i] + S[j]) mod 256
+    ++ Keystream: Z = S[t]
+```
