@@ -15,3 +15,13 @@ __man (x) (name)__
 8 - Lệnh quản trị hệ thống
 9 - Thủ tục và giao diện nội bộ của kernel; thường không có đầy đủ trên mọi hệ thống
 ```
+
+# Github
+```
+git status  : check new or modify files.
+git branch  : check current branch, if branch is not main, can use __git checkout main__.
+git add .   : add informations have changed.
+git commit -m "comment" : save data to the Git system.
+git push origin main    : push data to the main branch in Github.
+git pull origin main    : pull data from the main branch in Github.
+```
