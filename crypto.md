@@ -89,6 +89,7 @@ RC4 Stream Cipher:
     ++ Tráo đổi S[i] và S[j]
 - PRGA (Pseudo-Random Generation Algorithm)
   + Giữ nguyên mảng trạng thái S sau KSA, khởi tạo lại i = 0 và j = 0
+  + Có thể bỏ qua một số lượng byte keystream đầu tiên để tăng độ khó cho game :))
   + Thực hiện các bước sau, lặp lại cho đến khi tạo đủ số byte keystream cần thiết
     ++ i = (i + 1) mod 256
     ++ j = (j + S[i]) mod 256
