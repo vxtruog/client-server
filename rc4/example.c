@@ -1,53 +1,85 @@
+#include <stdio.h>
+#include <stdint.h>
+#include <string.h>
+
 #include "rc4.h"
 
-#define F fflush(stdout)
+int main(void)
+{
+    const uint8_t key[] = "vxtruog";
+    const uint8_t plaintext[] = "Xin chao, toi ten la Truong.";
+    const size_t discard_byte_count = 28;
 
-int main(void);
+    size_t data_length = sizeof(plaintext) - 1;
+    uint8_t ciphertext[sizeof(plaintext) - 1];
+    uint8_t decrypted_data[sizeof(plaintext) - 1];
 
-void printbin(int8 *input, const int16 size) {
-    int16 i;
-    int8 *p;
+    RC4 *encryption_state;
+    RC4 *decryption_state;
 
-    assert(size > 0);
+    encryption_state = rc4_init(key, sizeof(key) - 1);
 
-    for(i = size, p = input; i; i--, p++) {
-        if(!(i % 2))
-            printf(" ");
-        printf("%.02x", *p);
+    if (encryption_state == NULL)
+    {
+        fprintf(stderr, "failed to initialize encryption state.\n");
+        return 1;
+    }
+
+    rc4_discard(encryption_state, discard_byte_count);
+
+    if (rc4_crypt(encryption_state, plaintext, ciphertext, data_length) != 0)
+    {
+        fprintf(stderr, "encryption failed.\n");
+        rc4_free(encryption_state);
+        return 1;
+    }
+
+    printf("Plaintext : %s\n", plaintext);
+    printf("Ciphertext: ");
+
+    for (size_t index = 0; index < data_length; index++)
+    {
+        printf("%02X ", ciphertext[index]);
     }
     printf("\n");
 
-    return;
-}
+    decryption_state = rc4_init(key, sizeof(key) - 1);
 
-int main() {
-    RC4 *rc4;
-    char *key, *from;
-    int8 *encrypted, *decrypted;
-    int16 skey, stext;
+    if (decryption_state == NULL)
+    {
+        fprintf(stderr, "failed to initialize decryption state.\n");
+        rc4_free(encryption_state);
+        return 1;
+    }
 
-    key = "tomatoes";
-    skey = strlen(key);
-    from = "Shall I compare thee to a summer's day?";
-    stext = strlen(from);
+    rc4_discard(decryption_state, discard_byte_count);
 
-    printf("Initializing encryption ..."); F;
-    rc4 = rc4init((int8 *)key, skey);
-    printf("Done\n");
+    if (rc4_crypt(decryption_state, ciphertext, decrypted_data, data_length) != 0)
+    {
+        fprintf(stderr, "decryption failed.\n");
+        rc4_free(encryption_state);
+        rc4_free(decryption_state);
+        return 1;
+    }
 
-    printf("'%s'\n ->", from);
-    encrypted = rc4encrypt(rc4, (int8 *)from, stext);
-    printbin(encrypted, stext);
-    rc4uninit(rc4);
+    printf("Decrypted : ");
+    for (size_t index = 0; index < data_length; index++)
+    {
+        printf("%c", decrypted_data[index]);
+    }
+    printf("\n");
 
-    printf("Initializing decryption ..."); F;
-    rc4 = rc4init((int8 *)key, skey);
-    printf("Done\n");
+    if (memcmp(plaintext, decrypted_data, data_length) == 0)
+    {
+        printf("PASS\n");
+    }
+    else
+    {
+        printf("FAIL\n");
+    }
 
-    decrypted = rc4decrypt(rc4, encrypted, stext);
-    printf("   -> '%s'\n ->", decrypted);
-    rc4uninit(rc4);
+    rc4_free(encryption_state);
+    rc4_free(decryption_state);
 
     return 0;
-
 }
