@@ -89,11 +89,27 @@ RC4 Stream Cipher:
     ++ Tráo đổi S[i] và S[j]
 - PRGA (Pseudo-Random Generation Algorithm)
   + Giữ nguyên mảng trạng thái S sau KSA, khởi tạo lại i = 0 và j = 0
-  + Có thể bỏ qua một số lượng byte keystream đầu tiên để tăng độ khó cho game :))
   + Thực hiện các bước sau, lặp lại cho đến khi tạo đủ số byte keystream cần thiết
     ++ i = (i + 1) mod 256
     ++ j = (j + S[i]) mod 256
     ++ Tráo đổi S[i] và S[j]
     ++ t = (S[i] + S[j]) mod 256
     ++ Keystream: Z = S[t]
+  + Có thể bỏ qua một số lượng byte keystream đầu tiên để an toàn hơn.
+```
+
+```
+Hàm băm mật mã, cần đáp ứng:
+  + Khả năng nén: kích thước đầu ra phải nhỏ
+  + Độ hiệu quả: dễ dàng tính toán và nhanh
+  + Hàm một chiều: không thể dịch ngược được hàm băm
+  + Không thể tìm thấy hai thứ bất kỳ nào có cùng giá trị băm
+Hàm băm mật mã bao gồm:
+  + Hàm băm không mật mã: CRC
+
+```
+
+```
+CRC (Cyclic Redundancy Check)
+
 ```
