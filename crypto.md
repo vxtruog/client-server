@@ -110,6 +110,9 @@ Hàm băm mật mã bao gồm:
 ```
 
 ```
-CRC (Cyclic Redundancy Check)
-
+Binary Data Format, gồm 4 thành phần theo thứ tự:
+- Một số ngẫu nhiên x được mã hóa thành 2 bytes.
+- Lớp đệm ngẫu nhiên có độ lớn x bytes.
+- Giá trị hash 256 bits.
+- Dữ liệu thực.
 ```
