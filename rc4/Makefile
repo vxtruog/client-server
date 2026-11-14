@@ -1,23 +1,23 @@
 CC = aarch64-poky-linux-gcc
-
 CFLAGS = -O2 -Wall -Wextra -fPIC
 
-all: rc4 example
+INCDIR = /usr/include/
+LIBDIR = /usr/lib/
+LIB = librc4.so
 
-rc4.o: rc4.c rc4.h
-	$(CC) $(CFLAGS) -c rc4.c -o rc4.o
+all: $(LIB) example
 
-rc4: rc4.o
-	$(CC) -shared rc4.o -o rc4.so
+$(LIB): rc4.c rc4.h
+	$(CC) $(CFLAGS) -shared rc4.c -o $(LIB)
 
-example.o: example.c rc4.h
-	$(CC) $(CFLAGS) -c example.c -o example.o
+install: $(LIB)
+	cp rc4.h $(INCDIR)
+	cp $(LIB) $(LIBDIR)
 
-example: example.o rc4
-	$(CC) example.o -L. -l:rc4.so -o example \
-		-Wall -Wextra -O2 -Wl,-rpath,'$$ORIGIN'
+example:
+	$(CC) $(CFLAGS) example.c -lrc4 -o example
 
 clean:
-	rm -f *.o *.so example
+	rm -f *.so example
 
-.PHONY: all clean
+.PHONY: all install example clean
