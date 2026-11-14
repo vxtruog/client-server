@@ -1,8 +1,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
-
-#include "rc4.h"
+#include <rc4.h>
 
 int main(void)
 {
