@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-
-#include "rc4.h"
+#include <rc4.h>
 
 RC4_API RC4 *rc4_init(const uint8_t *key, size_t key_length)
 {
