@@ -13,6 +13,8 @@ librc4: rc4.c rc4.h
 install: $(LIB)
 	cp rc4.h $(INCDIR)
 	cp $(LIB) $(LIBDIR)
+	chmod 644 $(INCDIR)/rc4.h
+	chmod 755 $(LIBDIR)/$(LIB)
 
 example: install
 	$(CC) $(CFLAGS) example.c -lrc4 -o example
