@@ -99,6 +99,27 @@ RC4 Stream Cipher:
 ```
 
 ```
+Feistel Cipher: Encryption
+- Là phương pháp tổng quát để xây dựng thuật toán mã hóa khối (Block Cipher)
+- Lấy plaintext rồi chia nó làm đôi: P(L(0), R(0))
+- Thực hiện vòng lặp i = 1, 2, ..., n
+  + L(i) = R(i-1)
+  + R(i) = L(i-1) XOR F(R(i-1), K(i))
+    ++ F là hàm biến đổi dữ liệu trong từng vòng mã hóa
+    ++ K là subkey tạo ra từ khóa chính để sử dụng trong từng vòng mã hóa
+- Ciphertext: C = (L(n), R(n))
+
+Feistel Cipher: Decryption
+- Bắt đầu với C = (L(n), R(n))
+- Thực hiện vòng lặp i = n, n-1, ..., 1
+  + R(i-1) = L(i)
+  + L(i-1) = R(i) XOR F(R(i-1), K(i))
+    ++ F là hàm biến đổi dữ liệu trong từng vòng mã hóa
+    ++ K là subkey tạo ra từ khóa chính để sử dụng trong từng vòng mã hóa
+- Plaintext: P(L(0), R(0))
+```
+
+```
 Hàm băm mật mã, cần đáp ứng:
   + Khả năng nén: kích thước đầu ra phải nhỏ
   + Độ hiệu quả: dễ dàng tính toán và nhanh
