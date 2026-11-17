@@ -120,12 +120,8 @@ Feistel Cipher: Decryption
 ```
 
 ```
-DES Numerology
-- DES là một Feistel Cipher với:
-  + khối 64 bits
-  + khóa 56 bits
-  + 16 vòng lặp
-  + 48 bits trong số 56 bits khóa sẽ được sử dụng ở mỗi vòng lặp (subkey)
+DES
+https://orlingrabbe.com/des.htm
 ```
 
 ```
